@@ -1,4 +1,4 @@
-# EmDash Marketing Site
+# Marketing Site
 
 A marketing site built on the [EmDash](https://github.com/emdash-cms/emdash) blog template, deployed on Cloudflare Workers with D1 and R2.
 
