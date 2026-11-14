@@ -1,47 +1,47 @@
-# EmDash Blog Template (Cloudflare)
+# EmDash Marketing Site (Cloudflare)
 
-A clean, minimal blog built with [EmDash](https://github.com/emdash-cms/emdash) and deployed on Cloudflare Workers with D1 and R2.
-
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/emdash-cms/templates/tree/main/blog-cloudflare)
-
-![Blog template homepage](https://raw.githubusercontent.com/emdash-cms/emdash/main/assets/templates/blog/latest/homepage-light-desktop.jpg)
+A marketing site built on the [EmDash](https://github.com/emdash-cms/emdash) blog template, deployed on Cloudflare Workers with D1 and R2.
 
 ## What's Included
 
-- Featured post hero on the homepage
-- Post archive with reading time estimates
-- Category and tag archives
-- Full-text search
-- RSS feed
-- SEO metadata and JSON-LD
-- Dark/light mode
+- Marketing landing page (hero, services grid, featured case studies, stats, CTA)
+- Services page (CMS-editable)
+- Case studies collection with listing + detail pages
+- Blog (renamed from "Home") at `/blog`
+- Contact page with a Resend-backed form
+- About page (CMS-editable, blocks-based)
+- Full-text search, RSS feed, SEO metadata
+- Dark/light mode with theme switcher in the header
 
 ## Pages
 
 | Page | Route |
 |---|---|
-| Homepage | `/` |
-| All posts | `/posts` |
-| Single post | `/posts/:slug` |
+| Home (landing) | `/` |
+| About | `/about` |
+| Services | `/services` |
+| Case Studies | `/case-studies` |
+| Case Study detail | `/case-studies/:slug` |
+| Blog (All Articles) | `/blog` |
+| Single article | `/blog/:slug` |
 | Category archive | `/category/:slug` |
 | Tag archive | `/tag/:slug` |
 | Search | `/search` |
+| Contact | `/contact` |
 | Static pages | `/pages/:slug` |
+| RSS | `/rss.xml` |
 | 404 | fallback |
 
-## Screenshots
+## Collections
 
-| | Desktop | Mobile |
-|---|---|---|
-| Light | ![homepage light desktop](https://raw.githubusercontent.com/emdash-cms/emdash/main/assets/templates/blog/latest/homepage-light-desktop.jpg) | ![homepage light mobile](https://raw.githubusercontent.com/emdash-cms/emdash/main/assets/templates/blog/latest/homepage-light-mobile.jpg) |
-| Dark | ![homepage dark desktop](https://raw.githubusercontent.com/emdash-cms/emdash/main/assets/templates/blog/latest/homepage-dark-desktop.jpg) | ![homepage dark mobile](https://raw.githubusercontent.com/emdash-cms/emdash/main/assets/templates/blog/latest/homepage-dark-mobile.jpg) |
+- `posts` — blog articles (urlPattern `/blog/{slug}`)
+- `pages` — static pages with Portable Text + a blocks `layout` field (hero, features, stats, cta, text, values, team, newsletter)
+- `case_studies` — case studies (urlPattern `/case-studies/{slug}`), with client, industry, services, timeline, results
 
-## Infrastructure
+## Environment Variables
 
-- **Runtime:** Cloudflare Workers
-- **Database:** D1
-- **Storage:** R2
-- **Framework:** Astro with `@astrojs/cloudflare`
+- `RESEND_API_KEY` — Resend API key for the contact form
+- `CONTACT_TO_EMAIL` — recipient address for contact submissions
 
 ## Local Development
 
@@ -50,7 +50,13 @@ pnpm install
 pnpm dev
 ```
 
-Open http://localhost:4321/_emdash/admin and complete the setup wizard. EmDash runs database migrations and applies the blog seed during setup. The site is available at http://localhost:4321.
+Open http://localhost:4321/_emdash/admin and complete the setup wizard. EmDash runs database migrations and applies the seed during setup. The site is available at http://localhost:4321.
+
+To regenerate TypeScript types after schema changes:
+
+```bash
+npx emdash types
+```
 
 ## Deploying
 
@@ -59,10 +65,8 @@ pnpm wrangler login
 pnpm deploy
 ```
 
-The first deployment provisions the named D1 database and R2 bucket from `wrangler.jsonc`. See [Deploy to Cloudflare](https://docs.emdashcms.com/deployment/cloudflare/) for production setup, or use the deploy button above.
+The first deployment provisions the named D1 database and R2 bucket from `wrangler.jsonc`. See [Deploy to Cloudflare](https://docs.emdashcms.com/deployment/cloudflare/) for production setup.
 
 ## See Also
 
-- [Node.js variant](../blog) -- same template using SQLite and local file storage
-- [All templates](../)
 - [EmDash documentation](https://docs.emdashcms.com/)
