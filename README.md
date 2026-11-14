@@ -1,4 +1,4 @@
-# EmDash Marketing Site (Cloudflare)
+# EmDash Marketing Site
 
 A marketing site built on the [EmDash](https://github.com/emdash-cms/emdash) blog template, deployed on Cloudflare Workers with D1 and R2.
 
@@ -28,7 +28,7 @@ A marketing site built on the [EmDash](https://github.com/emdash-cms/emdash) blo
 | Tag archive | `/tag/:slug` |
 | Search | `/search` |
 | Contact | `/contact` |
-| Static pages | `/pages/:slug` |
+| Static pages | `/pages/:slug` | CMS-managed pages (About, Services, Contact) rendered from the `pages` collection |
 | RSS | `/rss.xml` |
 | 404 | fallback |
 
