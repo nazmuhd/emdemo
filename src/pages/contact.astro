@@ -1,0 +1,129 @@
+---
+import { getEmDashEntry, getSeoMeta, getSiteSettings } from "emdash";
+import { PortableText } from "emdash/ui";
+import Base from "../layouts/Base.astro";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+import "../styles/prose.css";
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", "contact");
+if (!page) return Astro.rewrite("/404");
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+const seo = getSeoMeta(page, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: Astro.url.pathname.replace(/\/$/, ""),
+});
+---
+
+<Base
+	title={seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	canonical={seo.canonical}
+	robots={seo.robots}
+	content={{ collection: "pages", id: page.data.id, slug: "contact" }}
+>
+	<header class="band intro">
+		<div class="frame">
+			<p class="eyebrow">Contact</p>
+			<h1 class="intro__title">{page.data.title}</h1>
+		</div>
+	</header>
+
+	<section class="band section">
+		<div class="frame contact-grid">
+			<div class="contact-info prose">
+				<PortableText value={page.data.content} />
+			</div>
+
+			<form id="contact-form" class="contact-form" novalidate>
+				<div class="field">
+					<label for="name">Name</label>
+					<input id="name" name="name" type="text" required />
+				</div>
+				<div class="field">
+					<label for="email">Email</label>
+					<input id="email" name="email" type="email" required />
+				</div>
+				<div class="field">
+					<label for="subject">Subject</label>
+					<input id="subject" name="subject" type="text" />
+				</div>
+				<div class="field">
+					<label for="message">Message</label>
+					<textarea id="message" name="message" rows="6" required></textarea>
+				</div>
+				<input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+				<button type="submit" class="btn">Send message</button>
+				<p id="contact-status" class="contact-status" aria-live="polite"></p>
+			</form>
+		</div>
+	</section>
+</Base>
+
+<style>
+	.contact-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: var(--spacing-10);
+		align-items: start;
+	}
+	.contact-info { max-width: none; }
+	.contact-form { display: grid; gap: var(--spacing-4); }
+	.field { display: grid; gap: var(--spacing-2); }
+	.field label { font-size: var(--font-size-sm); font-weight: 500; color: var(--color-text); }
+	.field input, .field textarea {
+		padding: var(--spacing-2) var(--spacing-3);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		background: var(--color-bg);
+		color: var(--color-text);
+		font: inherit;
+		font-size: var(--font-size-base);
+	}
+	.field input:focus, .field textarea:focus {
+		outline: 2px solid transparent;
+		border-color: var(--color-muted);
+		box-shadow: 0 0 0 3px var(--color-brand-ring);
+	}
+	.hp { position: absolute; left: -9999px; opacity: 0; height: 0; }
+	.contact-status { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+	.contact-status.is-error { color: var(--color-brand); }
+	.contact-status.is-success { color: var(--color-text); }
+	@media (max-width: 720px) {
+		.contact-grid { grid-template-columns: minmax(0, 1fr); }
+	}
+</style>
+
+<script>
+	const form = document.getElementById("contact-form") as HTMLFormElement | null;
+	const status = document.getElementById("contact-status");
+	form?.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		if (!form || !status) return;
+		status.textContent = "Sending…";
+		status.classList.remove("is-error", "is-success");
+		const data = Object.fromEntries(new FormData(form).entries());
+		try {
+			const res = await fetch("/api/contact", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(data),
+			});
+			const json = await res.json().catch(() => ({}));
+			if (!res.ok) {
+				status.textContent = json?.error || "Something went wrong. Please try again.";
+				status.classList.add("is-error");
+				return;
+			}
+			status.textContent = "Thanks — your message has been sent.";
+			status.classList.add("is-success");
+			form.reset();
+		} catch {
+			status.textContent = "Network error. Please try again.";
+			status.classList.add("is-error");
+		}
+	});
+</script>

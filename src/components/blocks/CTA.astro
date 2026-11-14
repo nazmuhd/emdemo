@@ -1,0 +1,16 @@
+---
+const { value } = Astro.props;
+---
+<section class="band section cta-band">
+	<div class="frame">
+		<h2 class="cta-band__title">{value.heading}</h2>
+		{value.body && <p class="cta-band__lead">{value.body}</p>}
+		{value.cta_label && value.cta_url && <a href={value.cta_url} class="btn">{value.cta_label}</a>}
+	</div>
+</section>
+<style>
+	.cta-band { text-align: center; padding-block: clamp(3rem, 2rem + 4vw, 5rem); }
+	.cta-band__title { font-size: var(--font-size-display); line-height: 1.05; }
+	.cta-band__lead { margin-top: var(--spacing-4); font-size: var(--font-size-lg); color: var(--color-text-secondary); }
+	.cta-band .btn { margin-top: var(--spacing-6); }
+</style>

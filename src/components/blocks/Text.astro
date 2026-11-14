@@ -1,0 +1,7 @@
+---
+import { PortableText } from "emdash/ui";
+const { value } = Astro.props;
+---
+<div class="prose page__body">
+	<PortableText value={value.body} />
+</div>

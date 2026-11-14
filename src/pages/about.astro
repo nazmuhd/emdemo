@@ -1,0 +1,56 @@
+---
+import { getEmDashEntry, getSeoMeta, getSiteSettings } from "emdash";
+import { Blocks, defineBlockComponents, PortableText } from "emdash/ui";
+import Base from "../layouts/Base.astro";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+import Text from "../components/blocks/Text.astro";
+import Values from "../components/blocks/Values.astro";
+import Stats from "../components/blocks/Stats.astro";
+import CTA from "../components/blocks/CTA.astro";
+import Team from "../components/blocks/Team.astro";
+import Newsletter from "../components/blocks/Newsletter.astro";
+import "../styles/prose.css";
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", "about");
+if (!page) return Astro.rewrite("/404");
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+const seo = getSeoMeta(page, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: Astro.url.pathname.replace(/\/$/, ""),
+});
+
+const blockComponents = defineBlockComponents({ text: Text, values: Values, stats: Stats, cta: CTA, team: Team, newsletter: Newsletter });
+---
+
+<Base
+	title={seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	canonical={seo.canonical}
+	robots={seo.robots}
+	content={{ collection: "pages", id: page.data.id, slug: "about" }}
+>
+	<article class="band page">
+		<div class="frame page__layout">
+			<header class="page__header">
+				<h1 class="page__title" {...page.edit.title}>{page.data.title}</h1>
+			</header>
+			<div class="page__body" {...page.edit.content}>
+				{page.data.layout && page.data.layout.length > 0 ? (
+					<Blocks value={page.data.layout} components={blockComponents} />
+				) : (
+					<div class="prose"><PortableText value={page.data.content} /></div>
+				)}
+			</div>
+		</div>
+	</article>
+</Base>
+
+<style>
+	.page { padding-block: clamp(3rem, 2rem + 4vw, 5.5rem) clamp(4rem, 3rem + 4vw, 7rem); }
+	.page__layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--spacing-8); max-width: var(--wide-width); margin-inline: auto; }
+	.page__title { font-size: var(--font-size-display); line-height: 1.05; max-width: 22ch; }
+</style>

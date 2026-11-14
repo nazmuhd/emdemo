@@ -1,0 +1,53 @@
+---
+const { value } = Astro.props;
+---
+<section class="band section newsletter-card-band">
+	<div class="frame">
+		<div class="newsletter-card">
+			<h2 class="newsletter-card__title">{value.heading}</h2>
+			{value.body && <p class="newsletter-card__text">{value.body}</p>}
+			<form class="newsletter-card__form" data-newsletter-form>
+				<input type="email" name="email" placeholder="you@example.com" required aria-label="Email address" />
+				<button type="submit" class="btn">{value.cta_label || "Subscribe"}</button>
+			</form>
+			<p class="newsletter-card__status" data-newsletter-status aria-live="polite"></p>
+		</div>
+	</div>
+</section>
+<style>
+	.newsletter-card-band { padding-block: clamp(2rem, 1.5rem + 2vw, 3rem); }
+	.newsletter-card { max-width: var(--content-width); margin-inline: auto; padding: clamp(2rem, 1.5rem + 2vw, 3rem); border-radius: var(--radius-xl); background: linear-gradient(135deg, var(--color-surface), var(--color-fill)); box-shadow: var(--shadow-card); text-align: center; position: relative; overflow: hidden; }
+	.newsletter-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, var(--color-brand-ring), transparent 60%); opacity: 0.4; pointer-events: none; }
+	.newsletter-card > * { position: relative; }
+	.newsletter-card__title { font-size: var(--font-size-2xl); margin-bottom: var(--spacing-2); letter-spacing: var(--tracking-tight); }
+	.newsletter-card__text { font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-bottom: var(--spacing-6); max-width: 40ch; margin-inline: auto; }
+	.newsletter-card__form { display: flex; gap: var(--spacing-2); justify-content: center; flex-wrap: wrap; }
+	.newsletter-card__form input { flex: 1 1 240px; max-width: 320px; padding: var(--spacing-3) var(--spacing-4); border: 1px solid var(--color-border); border-radius: var(--radius-full); background: var(--color-bg); color: var(--color-text); font: inherit; font-size: var(--font-size-base); transition: border-color var(--transition-fast), box-shadow var(--transition-fast); }
+	.newsletter-card__form input:focus { outline: 2px solid transparent; border-color: var(--color-brand); box-shadow: 0 0 0 3px var(--color-brand-ring); }
+	.newsletter-card__form button { border-radius: var(--radius-full); padding-inline: var(--spacing-6); }
+	.newsletter-card__status { font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-top: var(--spacing-3); }
+</style>
+
+<script>
+	document.querySelectorAll("[data-newsletter-form]").forEach((nf) => {
+		const status = nf.parentElement?.querySelector("[data-newsletter-status]");
+		nf.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			if (!status) return;
+			status.textContent = "Subscribing…";
+			const email = new FormData(nf).get("email");
+			try {
+				const res = await fetch("/api/contact", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ name: "Newsletter subscriber", email, subject: "Newsletter signup", message: "Please subscribe me.", website: "" }),
+				});
+				if (!res.ok) throw new Error();
+				status.textContent = "Thanks — you're subscribed!";
+				nf.reset();
+			} catch {
+				status.textContent = "Something went wrong. Try again.";
+			}
+		});
+	});
+</script>

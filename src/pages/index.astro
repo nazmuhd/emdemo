@@ -1,0 +1,222 @@
+---
+import { getEmDashCollection } from "emdash";
+import Base from "../layouts/Base.astro";
+import PostCard from "../components/PostCard.astro";
+
+// Latest blog posts for the preview section
+const { entries: latestPosts } = await getEmDashCollection("posts", {
+	orderBy: { published_at: "desc" },
+	limit: 3,
+});
+
+// Featured case studies
+const { entries: featuredCases } = await getEmDashCollection("case_studies", {
+	orderBy: { published_at: "desc" },
+	limit: 2,
+});
+---
+
+<Base title="Home" description="Welcome">
+	<!-- Hero -->
+	<header class="band intro hero-band">
+		<div class="frame">
+			<h1 class="intro__title">We build thoughtful web products.</h1>
+			<p class="intro__lead">
+				Strategy, design, and engineering — end to end. We help teams ship
+				products that are fast, accessible, and built to last.
+			</p>
+			<div class="hero__ctas">
+				<a href="/contact" class="btn">Get in touch</a>
+				<a href="/case-studies" class="btn btn--ghost">View case studies</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- Services overview -->
+	<section class="band section">
+		<div class="frame">
+			<div class="section-head">
+				<h2 class="section-head__title">Services</h2>
+				<a href="/services" class="arrow-link">All services
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+				</a>
+			</div>
+			<div class="post-grid">
+				<article class="service-card">
+					<span class="service-card__icon" aria-hidden="true"></span>
+					<h3 class="service-card__title">Strategy</h3>
+					<p class="service-card__text">Product discovery, roadmapping, and positioning.</p>
+				</article>
+				<article class="service-card">
+					<span class="service-card__icon" aria-hidden="true"></span>
+					<h3 class="service-card__title">Design</h3>
+					<p class="service-card__text">UX, UI, and design systems that scale.</p>
+				</article>
+				<article class="service-card">
+					<span class="service-card__icon" aria-hidden="true"></span>
+					<h3 class="service-card__title">Engineering</h3>
+					<p class="service-card__text">Full-stack development and launch support.</p>
+				</article>
+				<article class="service-card">
+					<span class="service-card__icon" aria-hidden="true"></span>
+					<h3 class="service-card__title">Branding</h3>
+					<p class="service-card__text">Visual identity, messaging, and brand guidelines.</p>
+				</article>
+				<article class="service-card">
+					<span class="service-card__icon" aria-hidden="true"></span>
+					<h3 class="service-card__title">Marketing</h3>
+					<p class="service-card__text">Campaigns, content, and growth strategy.</p>
+				</article>
+				<article class="service-card">
+					<span class="service-card__icon" aria-hidden="true"></span>
+					<h3 class="service-card__title">Support</h3>
+					<p class="service-card__text">Ongoing maintenance and technical support.</p>
+				</article>
+			</div>
+		</div>
+	</section>
+
+	<!-- Featured case studies -->
+	{featuredCases.length > 0 && (
+		<section class="band section">
+			<div class="frame">
+				<div class="section-head">
+					<h2 class="section-head__title">Featured case studies</h2>
+					<a href="/case-studies" class="arrow-link">All case studies
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+					</a>
+				</div>
+				<div class="post-grid">
+					{featuredCases.map((c) => (
+						<PostCard post={c} variant="card" headingLevel={3} basePath="/case-studies" />
+					))}
+				</div>
+			</div>
+		</section>
+	)}
+
+	<!-- Stats -->
+	<section class="band section stats-band">
+		<div class="frame">
+			<div class="stats">
+				<div class="stat">
+					<span class="stat__num">50+</span>
+					<span class="stat__label">Projects shipped</span>
+				</div>
+				<div class="stat">
+					<span class="stat__num">10</span>
+					<span class="stat__label">Years of experience</span>
+				</div>
+				<div class="stat">
+					<span class="stat__num">30+</span>
+					<span class="stat__label">Clients worldwide</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Latest from blog -->
+	{latestPosts.length > 0 && (
+		<section class="band section">
+			<div class="frame">
+				<div class="section-head">
+					<h2 class="section-head__title">Latest from the blog</h2>
+					<a href="/blog" class="arrow-link">All articles
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+					</a>
+				</div>
+				<div class="post-grid">
+					{latestPosts.map((p) => (
+						<PostCard post={p} variant="card" headingLevel={3} />
+					))}
+				</div>
+			</div>
+		</section>
+	)}
+
+	<!-- Final CTA -->
+	<section class="band section cta-band">
+		<div class="frame">
+			<h2 class="cta-band__title">Ready to start a project?</h2>
+			<p class="cta-band__lead">Let's talk about what you're building.</p>
+			<a href="/contact" class="btn">Get in touch</a>
+		</div>
+	</section>
+</Base>
+
+<style>
+	.hero-band .hero__ctas {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-3);
+		margin-top: var(--spacing-8);
+	}
+	.service-card {
+		display: grid;
+		gap: var(--spacing-3);
+		padding: var(--card-padding);
+		border-radius: var(--radius-xl);
+		background: var(--color-surface);
+		box-shadow: var(--shadow-card);
+		transition: transform var(--transition-base), box-shadow var(--transition-base);
+	}
+	.service-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-card-hover);
+	}
+	.service-card__icon {
+		width: 32px;
+		height: 32px;
+		color: var(--color-brand);
+		background: var(--color-brand);
+		border-radius: var(--radius);
+		opacity: 0.15;
+	}
+	.service-card__title {
+		font-size: var(--font-size-lg);
+	}
+	.service-card__text {
+		font-size: var(--font-size-sm);
+		color: var(--color-text-secondary);
+		line-height: var(--leading-normal);
+	}
+	.stats-band { padding-block: clamp(2rem, 1.5rem + 2vw, 3rem); }
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: var(--spacing-6);
+		text-align: center;
+	}
+	.stat { display: grid; gap: var(--spacing-2); }
+	.stat__num {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-display);
+		font-weight: 600;
+		line-height: 1;
+		color: var(--color-text);
+	}
+	.stat__label {
+		font-family: var(--font-mono);
+		font-size: var(--font-size-label);
+		letter-spacing: var(--tracking-wider);
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+	.cta-band {
+		text-align: center;
+		padding-block: clamp(3rem, 2rem + 4vw, 5rem);
+	}
+	.cta-band__title {
+		font-size: var(--font-size-display);
+		line-height: 1.05;
+	}
+	.cta-band__lead {
+		margin-top: var(--spacing-4);
+		font-size: var(--font-size-lg);
+		color: var(--color-text-secondary);
+	}
+	.cta-band .btn { margin-top: var(--spacing-6); }
+	@media (max-width: 640px) {
+		.stats { grid-template-columns: minmax(0, 1fr); }
+	}
+</style>

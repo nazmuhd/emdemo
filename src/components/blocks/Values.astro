@@ -1,0 +1,23 @@
+---
+const { value } = Astro.props;
+---
+<section class="band section">
+	<div class="frame">
+		{value.heading && <div class="section-head"><h2 class="section-head__title">{value.heading}</h2></div>}
+		<div class="values-row">
+			{(value.items ?? []).map((item) => (
+				<article class="value-card">
+					<h3 class="value-card__title">{item.title}</h3>
+					<p class="value-card__text">{item.description}</p>
+				</article>
+			))}
+		</div>
+	</div>
+</section>
+<style>
+	.values-row { display: flex; flex-wrap: wrap; gap: var(--spacing-4); }
+	.values-row .value-card { flex: 1 1 0; min-width: 200px; }
+	.value-card { padding: var(--card-padding); border-radius: var(--radius-xl); background: var(--color-surface); box-shadow: var(--shadow-card); }
+	.value-card__title { font-size: var(--font-size-lg); margin-bottom: var(--spacing-2); }
+	.value-card__text { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: var(--leading-normal); }
+</style>

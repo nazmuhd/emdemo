@@ -1,0 +1,24 @@
+---
+const { value } = Astro.props;
+---
+<section class="band section">
+	<div class="frame">
+		{value.heading && <div class="section-head"><h2 class="section-head__title">{value.heading}</h2></div>}
+		<div class="post-grid">
+			{(value.items ?? []).map((item) => (
+				<article class="service-card">
+					<span class="service-card__icon" aria-hidden="true"></span>
+					<h3 class="service-card__title">{item.title}</h3>
+					<p class="service-card__text">{item.description}</p>
+				</article>
+			))}
+		</div>
+	</div>
+</section>
+<style>
+	.service-card { display: grid; gap: var(--spacing-3); padding: var(--card-padding); border-radius: var(--radius-xl); background: var(--color-surface); box-shadow: var(--shadow-card); transition: transform var(--transition-base), box-shadow var(--transition-base); }
+	.service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+	.service-card__icon { width: 32px; height: 32px; color: var(--color-brand); background: var(--color-brand); border-radius: var(--radius); opacity: 0.15; }
+	.service-card__title { font-size: var(--font-size-lg); }
+	.service-card__text { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: var(--leading-normal); }
+</style>

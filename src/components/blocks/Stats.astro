@@ -1,0 +1,23 @@
+---
+const { value } = Astro.props;
+---
+<section class="band section stats-band">
+	<div class="frame">
+		<div class="stats">
+			{(value.items ?? []).map((item) => (
+				<div class="stat">
+					<span class="stat__num">{item.value}</span>
+					<span class="stat__label">{item.label}</span>
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+<style>
+	.stats-band { padding-block: clamp(2rem, 1.5rem + 2vw, 3rem); }
+	.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--spacing-6); text-align: center; }
+	.stat { display: grid; gap: var(--spacing-2); }
+	.stat__num { font-family: var(--font-mono); font-size: var(--font-size-display); font-weight: 600; line-height: 1; color: var(--color-text); }
+	.stat__label { font-family: var(--font-mono); font-size: var(--font-size-label); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--color-muted); }
+	@media (max-width: 640px) { .stats { grid-template-columns: minmax(0, 1fr); } }
+</style>

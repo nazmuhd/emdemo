@@ -1,0 +1,26 @@
+---
+import { Image } from "emdash/ui";
+const { value } = Astro.props;
+---
+<section class="band section">
+	<div class="frame">
+		{value.heading && <div class="section-head"><h2 class="section-head__title">{value.heading}</h2></div>}
+		<div class="team-grid">
+			{(value.items ?? []).map((m) => (
+				<div class="team-card">
+					{m.avatar && <div class="team-card__avatar"><Image image={m.avatar} /></div>}
+					<h3 class="team-card__name">{m.name}</h3>
+					{m.role && <p class="team-card__role">{m.role}</p>}
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+<style>
+	.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: var(--spacing-6); }
+	.team-card { text-align: center; }
+	.team-card__avatar { width: 96px; height: 96px; margin-inline: auto; margin-bottom: var(--spacing-3); border-radius: 50%; overflow: hidden; background: var(--color-fill); }
+	.team-card__avatar :global(img) { width: 100%; height: 100%; object-fit: cover; }
+	.team-card__name { font-size: var(--font-size-base); font-weight: 600; }
+	.team-card__role { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+</style>

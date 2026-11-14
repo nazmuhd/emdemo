@@ -1,0 +1,42 @@
+---
+import { getEmDashEntry, getSeoMeta, getSiteSettings } from "emdash";
+import { PortableText } from "emdash/ui";
+import Base from "../layouts/Base.astro";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+import "../styles/prose.css";
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", "services");
+if (!page) return Astro.rewrite("/404");
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+const seo = getSeoMeta(page, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: Astro.url.pathname.replace(/\/$/, ""),
+});
+---
+
+<Base
+	title={seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	canonical={seo.canonical}
+	robots={seo.robots}
+	content={{ collection: "pages", id: page.data.id, slug: "services" }}
+>
+	<header class="band intro">
+		<div class="frame">
+			<p class="eyebrow">Services</p>
+			<h1 class="intro__title">{page.data.title}</h1>
+		</div>
+	</header>
+
+	<section class="band section">
+		<div class="frame">
+			<div class="prose" style="max-width: var(--content-width); margin-inline: auto;">
+				<PortableText value={page.data.content} />
+			</div>
+		</div>
+	</section>
+</Base>
