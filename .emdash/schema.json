@@ -1,0 +1,193 @@
+{
+  "collections": [
+    {
+      "slug": "case_studies",
+      "label": "Case Studies",
+      "labelSingular": "Case Study",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "scheduling",
+        "search",
+        "seo"
+      ],
+      "hidden": false,
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "excerpt",
+          "label": "Excerpt",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "client",
+          "label": "Client",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "industry",
+          "label": "Industry",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "services",
+          "label": "Services",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "timeline",
+          "label": "Timeline",
+          "type": "string",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "results",
+          "label": "Results",
+          "type": "text",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "slug": "pages",
+      "label": "Pages",
+      "labelSingular": "Page",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "hidden": false,
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "layout",
+          "label": "Layout",
+          "type": "blocks",
+          "required": false,
+          "unique": false,
+          "validation": {
+            "allowedTypes": [
+              "hero",
+              "features",
+              "stats",
+              "cta",
+              "text",
+              "values",
+              "team",
+              "newsletter"
+            ],
+            "retiredTypes": [],
+            "minItems": 0,
+            "maxItems": 20
+          }
+        }
+      ]
+    },
+    {
+      "slug": "posts",
+      "label": "Posts",
+      "labelSingular": "Post",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "scheduling",
+        "search",
+        "seo"
+      ],
+      "hidden": false,
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "excerpt",
+          "label": "Excerpt",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "author_linkedin",
+          "label": "Author LinkedIn",
+          "type": "url",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "author_twitter",
+          "label": "Author Twitter/X",
+          "type": "url",
+          "required": false,
+          "unique": false
+        }
+      ]
+    }
+  ],
+  "version": "f35eb5f57ad519e9"
+}
